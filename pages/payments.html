@@ -1,0 +1,243 @@
+<?php require_once '../include/auth_pages.php'; ?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Requests | Society WorkForce Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/adminlte.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="../index.html" class="nav-link">Home</a>
+            </li>
+            
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img
+                  src="../assets/img/AdminLTELogo.png"
+                  class="user-image rounded-circle shadow"
+                  alt="User Image"
+                />
+                <span class="d-none d-md-inline">Admin</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img
+                    src="../assets/img/AdminLTELogo.png"
+                    class="rounded-circle shadow"
+                    alt="User Image"
+                  />
+                  <p>
+                    Society Admin
+                    <small>Member since Dec, 2024</small>
+                  </p>
+                </li>
+                <li class="user-footer">
+                  <a href="admin_login.html" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="../index.html" class="brand-link">
+            <img
+              src="../assets/img/AdminLTELogo.png"
+              alt="AdminLTE Logo"
+              class="brand-image opacity-75 shadow"
+            />
+            <span class="brand-text fw-light">🌿 Green Villas</span>
+          </a>
+        </div>
+            <div class="sidebar-wrapper">
+                <nav class="mt-2">
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+                        <li class="nav-item">
+                            <a href="../index.html" class="nav-link"><i class="nav-icon bi bi-speedometer"></i><p>Dashboard</p></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="manage_house.html" class="nav-link"><i class="nav-icon bi bi-house"></i><p>Manage House</p></a>
+                        </li>
+
+                         <li class="nav-item">
+                            <a href="worker_list.html" class="nav-link"><i class="nav-icon bi bi-people"></i><p>Worker List</p></a>
+                        </li>
+
+                         
+
+                         <li class="nav-item">
+                            <a href="availability_tracking.html" class="nav-link"><i class="nav-icon bi bi-calendar-check"></i><p>Availability Tracking</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="assign_tasks.html" class="nav-link"><i class="nav-icon bi bi-list-task"></i><p>Assign Tasks</p></a>
+                        </li>
+                           <li class="nav-item">
+                            <a href="requests.html" class="nav-link"><i class="nav-icon bi bi-envelope"></i><p>Requests</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="payments.html" class="nav-link active"><i class="nav-icon bi bi-cash-stack"></i><p>Payments</p></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6"><h3 class="mb-0">Worker Payments</h3></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-content">
+                <div class="container-fluid">
+                    <div class="card mb-4 shadow-sm border-success">
+                        <div class="card-header bg-success text-white">Record New Payment</div>
+                        <div class="card-body">
+                            <form id="paymentForm">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Select Worker</label>
+                                        <select name="worker_id" id="workerSelect" class="form-select" required>
+                                            <option value="">Choose Worker...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Amount (Rs.)</label>
+                                        <input type="number" name="amount" id="payAmount" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Payment Method</label>
+                                        <select name="payment_method" class="form-select">
+                                            <option value="Cash">Cash</option>
+                                            <option value="Online Transfer">Online Transfer</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 align-self-end">
+                                        <button type="submit" class="btn btn-modern w-100">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">Recent Payment History</div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Worker</th>
+                                            <th>Category</th>
+                                            <th>Amount</th>
+                                            <th>Method</th>
+                                            <th>Date Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="payment_list">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/adminlte.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWorkers();
+            loadPaymentHistory();
+
+            // Handle Payment Submission
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch('../include/process_payment.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        alert('Payment recorded successfully!');
+                        this.reset();
+                        loadPaymentHistory();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                });
+            });
+        });
+
+        // Load workers into the dropdown
+        function loadWorkers() {
+            fetch('../include/get_active_workers_for_assign.php')
+                .then(res => res.json())
+                .then(workers => {
+                    const select = document.getElementById('workerSelect');
+                    workers.forEach(w => {
+                        select.innerHTML += `<option value="${w.worker_id}">${w.name} (${w.category})</option>`;
+                    });
+                });
+        }
+
+        // Load the history table
+        function loadPaymentHistory() {
+            fetch('../include/get_payments.php')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('payment_list').innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>

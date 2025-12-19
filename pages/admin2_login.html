@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Two Login | Green Villas Society</title>
+  <style>
+    body.login-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f4f8;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 350px;
+    }
+
+    .login-title {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #28a745;
+    }
+
+    .login-sub {
+      margin-bottom: 25px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      background: #0288d1;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background: #0277bd;
+    }
+
+    .switch-link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+
+    .admin-selection {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #e3f2fd;
+      border-radius: 8px;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      background: #0288d1;
+      color: white;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body class="login-body">
+
+  <div class="login-container">
+    <h2 class="login-title">🌿 Green Villas Society</h2>
+    <h3 class="login-sub">Admin Two Login</h3>
+    
+    <div class="admin-selection">
+      <div class="admin-badge">Admin Two</div>
+      <p style="margin: 5px 0; font-size: 14px;">Login for secondary administrator</p>
+    </div>
+
+    <form action="../include/admin_login.php" method="POST">
+      <input type="hidden" name="admin_type" value="admin_two">
+      
+      <!-- Pre-filled for easy testing -->
+      <input type="text" name="email" placeholder="Email" required value="admin.two@greenvillas.pk">
+      <input type="password" name="password" placeholder="Password" required>
+
+      <button type="submit">Login → Dashboard</button>
+
+      <p class="switch-link">
+        Login as <a href="admin_login.html">Admin One</a> | 
+        <a href="worker_login.html">Worker Login</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    // Show error message if login failed
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('login') === 'failed') {
+      alert('Wrong email or password! Try:\nEmail: admin.two@greenvillas.pk\nPassword: admin456');
+    }
+  </script>
+
+</body>
+</html>

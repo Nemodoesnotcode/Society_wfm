@@ -1,0 +1,1738 @@
+<?php require_once '../include/auth_pages.php'; ?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Worker List | Society WorkForce Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/adminlte.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .btn-gradient-success { background: linear-gradient(45deg, #28a745, #85e085); color:white; border: none; }
+      .btn-gradient-info { background: linear-gradient(45deg, #17a2b8, #6cd9e8); color:white; border: none; }
+      .btn-gradient-danger { background: linear-gradient(45deg, #dc3545, #f28b8b); color:white; border: none; }
+      .table-gradient-primary { background: linear-gradient(90deg, #0d6efd, #6ea8fd); }
+      
+      /* Notes column styling */
+      .notes-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      
+      .notes-cell:hover {
+        white-space: normal;
+        overflow: visible;
+        background-color: #f8f9fa;
+        position: relative;
+        z-index: 100;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      /* Add this to your existing CSS */
+.password-cell span {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #212529; /* Ensure text is visible */
+  background-color: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  min-width: 80px;
+  display: inline-block;
+}
+      
+      /* Hired date styling */
+      .hired-date {
+        font-size: 0.85rem;
+        color: #6c757d;
+      }
+      
+      .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+      }
+      
+      /* Password column styling */
+      .password-cell {
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+      
+      /* CNIC/Username styling */
+      .cnic-cell {
+        font-family: monospace;
+        font-size: 0.9rem;
+      }
+      
+      /* Loading spinner */
+      .loading-spinner {
+        display: none;
+        width: 2rem;
+        height: 2rem;
+      }
+      
+      .loading-spinner.active {
+        display: inline-block;
+      }
+      
+      /* Empty state */
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+      }
+      
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      /* Validation error styling */
+      .is-invalid {
+        border-color: #dc3545 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+      }
+      
+      .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #dc3545;
+      }
+      
+      /* Status badges */
+      .badge-active {
+        background-color: #28a745;
+      }
+      
+      .badge-inactive {
+        background-color: #6c757d;
+      }
+      
+      /* Action buttons */
+      .action-buttons {
+        min-width: 120px;
+      }
+      
+      /* Search and filter section */
+      .search-filter-section {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.375rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #dee2e6;
+      }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="../index.html" class="nav-link">Home</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img
+                  src="../assets/img/AdminLTELogo.png"
+                  class="user-image rounded-circle shadow"
+                  alt="User Image"
+                />
+                <span class="d-none d-md-inline">Admin</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img
+                    src="../assets/img/AdminLTELogo.png"
+                    class="rounded-circle shadow"
+                    alt="User Image"
+                  />
+                  <p>
+                    Society Admin
+                    <small>Member since Dec, 2024</small>
+                  </p>
+                </li>
+                <li class="user-footer">
+                  <a href="admin_login.html" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="../index.html" class="brand-link">
+            <img
+              src="../assets/img/AdminLTELogo.png"
+              alt="AdminLTE Logo"
+              class="brand-image opacity-75 shadow"
+            />
+            <span class="brand-text fw-light">🌿 Green Villas</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation">
+              <li class="nav-item">
+                <a href="../index.html" class="nav-link">
+                  <i class="nav-icon bi bi-speedometer"></i>
+                  <p>Main Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="manage_house.html" class="nav-link">
+                  <i class="nav-icon bi bi-house"></i>
+                  <p>Manage Houses</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="worker_list.html" class="nav-link active">
+                  <i class="nav-icon bi bi-people"></i>
+                  <p>Worker List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="availability_tracking.html" class="nav-link">
+                  <i class="nav-icon bi bi-calendar-check"></i>
+                  <p>Availability Tracking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="assign_tasks.html" class="nav-link">
+                  <i class="nav-icon bi bi-list-task"></i>
+                  <p>Assign Tasks</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="requests.html" class="nav-link">
+                  <i class="nav-icon bi bi-envelope"></i>
+                  <p>Requests</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="payments.html" class="nav-link">
+                  <i class="nav-icon bi bi-cash-stack"></i>
+                  <p>Payments</p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3 class="mb-0">Worker List</h3>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Worker List</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row mb-4 align-items-center">
+              <div class="col-sm-6">
+                <h3 class="mb-0 text-primary">Worker List</h3>
+                <small class="text-muted" id="workerCount">Loading workers...</small>
+              </div>
+              <div class="col-sm-6 text-end">
+                <button class="btn btn-gradient-success" data-bs-toggle="modal" data-bs-target="#addWorkerModal">
+                  <i class="bi bi-plus-circle me-1"></i>Add New Worker
+                </button>
+                <button class="btn btn-outline-secondary ms-2" onclick="loadWorkers()" title="Refresh list">
+                  <i class="bi bi-arrow-clockwise"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="search-filter-section">
+              <div class="row g-2">
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control border-primary" placeholder="Search by name, CNIC, ID, email or notes" id="searchWorkers">
+                    <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()" title="Clear search">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select border-info text-info" id="filterCategory">
+                    <option value="">All Categories</option>
+                    <option>Electrician</option>
+                    <option>Plumber</option>
+                    <option>Cook</option>
+                    <option>Maid</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select border-warning text-warning" id="filterStatus">
+                    <option value="">All Status</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="date" class="form-control border-success" id="filterHiredDate" placeholder="Hired Date">
+                    <button class="btn btn-outline-secondary" type="button" onclick="clearDateFilter()" title="Clear date filter">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="filterHighSalary" value="high">
+                    <label class="form-check-label text-success" for="filterHighSalary">High Salary (> 30,000)</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="filterRecent" value="recent">
+                    <label class="form-check-label text-primary" for="filterRecent">Hired in Last 30 Days</label>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary float-end" onclick="clearAllFilters()">
+                    <i class="bi bi-filter-circle"></i> Clear All Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <div class="card shadow-sm border-primary">
+                  <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Workers Management</h5>
+                      <div class="d-flex align-items-center">
+                        <div class="spinner-border spinner-border-sm text-primary me-2 loading-spinner" role="status" id="tableSpinner">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="badge bg-primary" id="visibleCount">0</span>
+                        <span class="mx-2">/</span>
+                        <span class="badge bg-secondary" id="totalCount">0</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body bg-light p-0">
+                    <div class="table-responsive" style="max-height: 500px;">
+                      <table class="table table-hover table-bordered align-middle mb-0">
+                        <thead class="table-gradient-primary text-white" style="position: sticky; top: 0; z-index: 10;">
+                          <tr>
+                            <th width="40">#</th>
+                            <th width="80">Worker ID</th>
+                            <th>Name</th>
+                            <th width="140">CNIC</th>
+                            <th width="120">Password</th>
+                            <th>Email</th>
+                            <th width="100">Category</th>
+                            <th width="100">Payment Type</th>
+                            <th width="100">Salary Rate</th>
+                            <th width="80">Status</th>
+                            <th width="100">Contact</th>
+                            <th width="100">Hired Date</th>
+                            <th width="150">Notes</th>
+                            <th width="120" class="action-buttons">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="workersTableBody">
+                          <!-- Data will be loaded here -->
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                      <i class="bi bi-people text-muted"></i>
+                      <h5>No workers found</h5>
+                      <p class="text-muted" id="emptyStateMessage">Try adjusting your search or filters</p>
+                      <button class="btn btn-primary mt-2" onclick="clearAllFilters()">Clear All Filters</button>
+                    </div>
+                  </div>
+                  <div class="card-footer bg-light">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportToCSV()">
+                            <i class="bi bi-download me-1"></i>Export CSV
+                          </button>
+                          <button type="button" class="btn btn-outline-success btn-sm" onclick="printTable()">
+                            <i class="bi bi-printer me-1"></i>Print
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col-md-6 text-end">
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="sortTable('name', 'asc')">
+                            <i class="bi bi-sort-alpha-down"></i> Sort A-Z
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="sortTable('salary', 'desc')">
+                            <i class="bi bi-sort-numeric-down"></i> High Salary
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <div class="float-end d-none d-sm-inline">Providing Services</div>
+        <strong>
+          Copyright &copy; 2014-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none">NAA.io</a>.
+        </strong>
+        All rights reserved.
+      </footer>
+    </div>
+
+    <!-- Add Worker Modal -->
+    <div class="modal fade" id="addWorkerModal" tabindex="-1" aria-labelledby="addWorkerLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addWorkerLabel">Add New Worker</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="addWorkerForm" onsubmit="handleWorkerSubmit(event, this)">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter full name" required 
+                           oninput="validateField(this, 'name')">
+                    <div class="invalid-feedback">Name must be at least 3 characters long</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Contact Number *</label>
+                    <input type="text" name="phone" class="form-control" placeholder="03001234567" required 
+                           pattern="\d{11}" title="11 digits only" oninput="validateField(this, 'phone')">
+                    <div class="invalid-feedback">Phone must be exactly 11 digits</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" placeholder="worker@example.com" required 
+                           oninput="validateField(this, 'email')">
+                    <div class="invalid-feedback">Please enter a valid email address</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">CNIC *</label>
+                    <input type="text" name="cnic" class="form-control" placeholder="35201-1234567-1" required 
+                           pattern="\d{5}-\d{7}-\d{1}" title="Format: XXXXX-XXXXXXX-X" oninput="validateField(this, 'cnic')">
+                    <div class="invalid-feedback">CNIC must be in format: XXXXX-XXXXXXX-X</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Password *</label>
+                    <div class="input-group">
+                      <input type="password" name="password" class="form-control" placeholder="Minimum 8 characters" required 
+                             minlength="8" oninput="validateField(this, 'password')" id="addPassword">
+                      <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('addPassword')">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                    <div class="invalid-feedback">Password must be at least 8 characters long</div>
+                    <small class="form-text text-muted">Include uppercase, lowercase, numbers, and special characters for security</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Category *</label>
+                    <select name="category" class="form-select" required onchange="validateField(this, 'select')">
+                      <option value="">Select Category</option>
+                      <option>Electrician</option>
+                      <option>Plumber</option>
+                      <option>Cook</option>
+                      <option>Maid</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a category</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Payment Type *</label>
+                    <select name="payment_type" class="form-select" required onchange="validateField(this, 'select')">
+                      <option value="">Select Type</option>
+                      <option value="PER_TASK">Per Task</option>
+                      <option value="PER_DAY">Per Day</option>
+                      <option value="SALARY">Salary</option>
+                    </select>
+                    <div class="invalid-feedback">Please select payment type</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Salary Rate (Rs.) *</label>
+                    <input type="number" name="salary_per" class="form-control" placeholder="0.00" step="0.01" min="0.01" required 
+                           oninput="validateField(this, 'salary')">
+                    <div class="invalid-feedback">Salary must be greater than 0</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Hired Date *</label>
+                    <input type="date" name="hired_date" class="form-control" required 
+                           max="<?php echo date('Y-m-d'); ?>" onchange="validateField(this, 'date')">
+                    <div class="invalid-feedback">Please select a valid date (not in future)</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Status *</label>
+                    <select name="status" class="form-select" required onchange="validateField(this, 'select')">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div class="invalid-feedback">Please select status</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Notes (Optional)</label>
+                <textarea name="notes" class="form-control" placeholder="Additional information about the worker" rows="3" maxlength="500"></textarea>
+                <small class="form-text text-muted">Maximum 500 characters</small>
+              </div>
+              
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <small>Fields marked with * are required. All data will be validated before submission.</small>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-gradient-success" id="addWorkerBtn">
+                <span class="spinner-border spinner-border-sm me-1 d-none" role="status" id="addWorkerSpinner"></span>
+                Save Worker
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Worker Modal -->
+    <div class="modal fade" id="editWorkerModal" tabindex="-1" aria-labelledby="editWorkerLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editWorkerLabel">Edit Worker</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="editWorkerForm" onsubmit="handleWorkerSubmit(event, this)">
+            <div class="modal-body">
+              <input type="hidden" name="worker_id" id="editWorkerId">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" name="name" class="form-control" id="editName" placeholder="Enter full name" required 
+                           oninput="validateField(this, 'name')">
+                    <div class="invalid-feedback">Name must be at least 3 characters long</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Contact Number *</label>
+                    <input type="text" name="phone" class="form-control" id="editPhone" placeholder="03001234567" required 
+                           pattern="\d{11}" title="11 digits only" oninput="validateField(this, 'phone')">
+                    <div class="invalid-feedback">Phone must be exactly 11 digits</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" id="editEmail" placeholder="worker@example.com" required 
+                           oninput="validateField(this, 'email')">
+                    <div class="invalid-feedback">Please enter a valid email address</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">CNIC *</label>
+                    <input type="text" name="cnic" class="form-control" id="editCnic" placeholder="35201-1234567-1" required 
+                           pattern="\d{5}-\d{7}-\d{1}" title="Format: XXXXX-XXXXXXX-X" oninput="validateField(this, 'cnic')">
+                    <div class="invalid-feedback">CNIC must be in format: XXXXX-XXXXXXX-X</div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">New Password (Optional)</label>
+                    <div class="input-group">
+                      <input type="password" name="password" class="form-control" placeholder="Leave empty to keep current" 
+                             minlength="8" oninput="validateField(this, 'password')" id="editPassword">
+                      <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('editPassword')">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                    <div class="invalid-feedback">Password must be at least 8 characters long</div>
+                    <small class="form-text text-muted">Leave empty if you don't want to change the password</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Category *</label>
+                    <select name="category" class="form-select" id="editCategory" required onchange="validateField(this, 'select')">
+                      <option value="">Select Category</option>
+                      <option>Electrician</option>
+                      <option>Plumber</option>
+                      <option>Cook</option>
+                      <option>Maid</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a category</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Payment Type *</label>
+                    <select name="payment_type" class="form-select" id="editPaymentType" required onchange="validateField(this, 'select')">
+                      <option value="">Select Type</option>
+                      <option value="PER_TASK">Per Task</option>
+                      <option value="PER_DAY">Per Day</option>
+                      <option value="SALARY">Salary</option>
+                    </select>
+                    <div class="invalid-feedback">Please select payment type</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label">Salary Rate (Rs.) *</label>
+                    <input type="number" name="salary_per" class="form-control" id="editSalaryPer" placeholder="0.00" step="0.01" min="0.01" required 
+                           oninput="validateField(this, 'salary')">
+                    <div class="invalid-feedback">Salary must be greater than 0</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Hired Date *</label>
+                    <input type="date" name="hired_date" class="form-control" id="editHiredDate" required 
+                           max="<?php echo date('Y-m-d'); ?>" onchange="validateField(this, 'date')">
+                    <div class="invalid-feedback">Please select a valid date (not in future)</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Status *</label>
+                    <select name="status" class="form-select" id="editStatus" required onchange="validateField(this, 'select')">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <div class="invalid-feedback">Please select status</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea name="notes" class="form-control" id="editNotes" placeholder="Additional information about the worker" rows="3" maxlength="500"></textarea>
+                <small class="form-text text-muted">Maximum 500 characters</small>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-gradient-success" id="editWorkerBtn">
+                <span class="spinner-border spinner-border-sm me-1 d-none" role="status" id="editWorkerSpinner"></span>
+                Update Worker
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Notes Modal -->
+    <div class="modal fade" id="viewNotesModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Worker Notes</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p id="notesContent" class="mb-0"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Deactivation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to deactivate this worker?</p>
+            <p class="text-muted"><small>Worker status will be set to "Inactive". This action can be reversed by editing the worker.</small></p>
+            <div class="alert alert-warning mt-3">
+              <i class="bi bi-info-circle me-2"></i>
+              <small>Deactivated workers will not appear in available worker lists for new tasks.</small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Deactivate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script>
+  // Global variables
+  let workersData = [];
+  let currentWorkerIdToDelete = null;
+  let currentSortColumn = null;
+  let currentSortDirection = 'asc';
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    loadWorkers();
+    
+    // Setup search and filter event listeners with debouncing
+    setupEventListeners();
+    
+    // Setup modal event listeners
+    setupModalListeners();
+    
+    // Initialize tooltips
+    initTooltips();
+    
+    // Setup delete confirmation
+    document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDeleteWorker);
+    
+    // Add password generator to add form
+    const addPasswordGroup = document.querySelector('#addWorkerForm .input-group');
+    if (addPasswordGroup) {
+      const generateBtn = document.createElement('button');
+      generateBtn.className = 'btn btn-outline-info';
+      generateBtn.type = 'button';
+      generateBtn.innerHTML = '<i class="bi bi-shuffle"></i> Generate';
+      generateBtn.onclick = generateAndSetPassword;
+      addPasswordGroup.appendChild(generateBtn);
+    }
+  });
+
+  // Setup event listeners with debouncing
+  function setupEventListeners() {
+    const searchInput = document.getElementById('searchWorkers');
+    const categoryFilter = document.getElementById('filterCategory');
+    const statusFilter = document.getElementById('filterStatus');
+    const hiredDateFilter = document.getElementById('filterHiredDate');
+    const highSalaryFilter = document.getElementById('filterHighSalary');
+    const recentFilter = document.getElementById('filterRecent');
+    
+    // Debounce search input to avoid too many filter calls
+    let searchTimeout;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => filterWorkers(), 300);
+    });
+    
+    // Other filters
+    categoryFilter.addEventListener('change', filterWorkers);
+    statusFilter.addEventListener('change', filterWorkers);
+    hiredDateFilter.addEventListener('change', filterWorkers);
+    highSalaryFilter.addEventListener('change', filterWorkers);
+    recentFilter.addEventListener('change', filterWorkers);
+  }
+
+  function setupModalListeners() {
+    // Clear validation on modal hide
+    const addModal = document.getElementById('addWorkerModal');
+    const editModal = document.getElementById('editWorkerModal');
+    
+    addModal.addEventListener('hidden.bs.modal', function() {
+      resetForm('addWorkerForm');
+    });
+    
+    editModal.addEventListener('hidden.bs.modal', function() {
+      resetForm('editWorkerForm');
+    });
+  }
+
+  function initTooltips() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }
+
+  // Load workers data with error handling
+  function loadWorkers() {
+    showLoading(true);
+    
+    fetch('../include/get_workers.php')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format received from server');
+        }
+        
+        workersData = data;
+        renderWorkersTable(data);
+        updateCounts(data.length, data.length);
+        showToast('Success', `Loaded ${data.length} workers`, 'success');
+      })
+      .catch(error => {
+        console.error('Error loading workers:', error);
+        showErrorState(`Failed to load workers: ${error.message}`);
+        showToast('Error', 'Failed to load workers. Please try again.', 'danger');
+      })
+      .finally(() => {
+        showLoading(false);
+      });
+  }
+
+  function renderWorkersTable(workers) {
+    const tbody = document.getElementById('workersTableBody');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (!workers || workers.length === 0) {
+      tbody.innerHTML = '';
+      emptyState.style.display = 'block';
+      document.getElementById('emptyStateMessage').textContent = workersData.length === 0 
+        ? 'No workers in the system. Add your first worker!' 
+        : 'No workers match your current filters.';
+      return;
+    }
+    
+    emptyState.style.display = 'none';
+    
+    let html = '';
+    workers.forEach((worker, index) => {
+      const statusClass = worker.status === 'Active' ? 'badge-active' : 'badge-inactive';
+      const paymentTypeText = getPaymentTypeText(worker.payment_type);
+      const rawHiredDate = worker.hired_date && worker.hired_date !== '0000-00-00' ? worker.hired_date : '';
+      const hiredDateDisplay = formatDate(rawHiredDate);
+      const notesDisplay = truncateText(worker.notes || 'No notes', 40);
+      const cnic = worker.cnic || 'N/A';
+      const password = worker.plain_password || 'No password set';  // Changed from password_hash to plain_password
+      const salary = parseFloat(worker.salary_per) || 0;
+      const salaryClass = salary > 30000 ? 'text-success fw-bold' : '';
+      
+      html += `
+        <tr data-worker-id="${worker.worker_id}" data-salary="${salary}" data-hired-date="${rawHiredDate}">
+          <td>${index + 1}</td>
+          <td><span class="badge bg-primary">${worker.worker_id || 'N/A'}</span></td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-2">
+                <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                  ${worker.name ? worker.name.charAt(0).toUpperCase() : '?'}
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <strong>${escapeHtml(worker.name || 'N/A')}</strong>
+                ${worker.email ? `<br><small class="text-muted">${escapeHtml(worker.email)}</small>` : ''}
+              </div>
+            </div>
+          </td>
+          <td class="cnic-cell"><code>${escapeHtml(cnic)}</code></td>
+          <td class="password-cell">
+            <div class="d-flex align-items-center">
+              <span class="password-display" data-password="${escapeHtml(password)}">••••••••</span>
+              <button class="btn btn-sm btn-outline-secondary ms-1" onclick="toggleTablePassword(this)" title="Show/Hide Password">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-info ms-1" onclick="copyPassword('${escapeHtml(password)}')" title="Copy Password">
+                <i class="bi bi-clipboard"></i>
+              </button>
+            </div>
+          </td>
+          <td><a href="mailto:${escapeHtml(worker.email || '')}" class="text-decoration-none">${escapeHtml(worker.email || 'N/A')}</a></td>
+          <td><span class="badge bg-info">${escapeHtml(worker.category || 'N/A')}</span></td>
+          <td><span class="badge bg-warning text-dark">${paymentTypeText}</span></td>
+          <td class="${salaryClass}">Rs. ${salary.toLocaleString('en-PK', {minimumFractionDigits: 2})}</td>
+          <td><span class="badge ${statusClass}">${worker.status || 'N/A'}</span></td>
+          <td><a href="tel:${escapeHtml(worker.phone || '')}" class="text-decoration-none">${escapeHtml(worker.phone || 'N/A')}</a></td>
+          <td class="hired-date" data-sort-date="${rawHiredDate}">${hiredDateDisplay}</td>
+          <td class="notes-cell" title="${escapeHtml(worker.notes || '')}" onclick="viewNotes('${escapeHtml(worker.name || '')}', '${escapeHtml(worker.notes || 'No notes')}')">
+            ${escapeHtml(notesDisplay)}
+          </td>
+          <td class="action-buttons">
+            <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-outline-primary" onclick="editWorker(${worker.worker_id || 0})" title="Edit">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-outline-info" onclick="quickViewWorker(${worker.worker_id || 0})" title="Quick View">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-outline-danger" onclick="initiateDeleteWorker(${worker.worker_id || 0})" title="Deactivate">
+                <i class="bi bi-person-x"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+    
+    tbody.innerHTML = html;
+  }
+
+  // PASSWORD-RELATED FUNCTIONS
+  function toggleTablePassword(button) {
+    const row = button.closest('tr');
+    const passwordSpan = row.querySelector('.password-display');
+    const icon = button.querySelector('i');
+    
+    if (passwordSpan.textContent === '••••••••') {
+      // Show password
+      const realPassword = passwordSpan.getAttribute('data-password');
+      passwordSpan.textContent = realPassword || 'No password';
+      passwordSpan.style.fontFamily = "'Courier New', monospace";
+      passwordSpan.style.fontSize = "0.9rem";
+      passwordSpan.style.color = "#212529";
+      icon.classList.remove('bi-eye');
+      icon.classList.add('bi-eye-slash');
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        if (passwordSpan.textContent !== '••••••••') {
+          passwordSpan.textContent = '••••••••';
+          icon.classList.remove('bi-eye-slash');
+          icon.classList.add('bi-eye');
+        }
+      }, 5000);
+    } else {
+      // Hide password
+      passwordSpan.textContent = '••••••••';
+      icon.classList.remove('bi-eye-slash');
+      icon.classList.add('bi-eye');
+    }
+  }
+
+  function copyPassword(password) {
+    if (!password || password === 'No password set') {
+      showToast('Error', 'No password available', 'warning');
+      return;
+    }
+    
+    navigator.clipboard.writeText(password).then(() => {
+      showToast('Success', 'Password copied to clipboard', 'success');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      showToast('Error', 'Failed to copy password', 'danger');
+    });
+  }
+
+  function generatePassword() {
+    const length = 12;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let password = "";
+    
+    // Ensure at least one of each type
+    password += "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random() * 26));
+    password += "abcdefghijklmnopqrstuvwxyz".charAt(Math.floor(Math.random() * 26));
+    password += "0123456789".charAt(Math.floor(Math.random() * 10));
+    password += "!@#$%^&*".charAt(Math.floor(Math.random() * 8));
+    
+    // Fill the rest
+    for (let i = 4; i < length; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    
+    // Shuffle the password
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+    
+    return password;
+  }
+
+  function generateAndSetPassword() {
+    const newPassword = generatePassword();
+    const passwordField = document.getElementById('addPassword');
+    passwordField.value = newPassword;
+    
+    // Show the password
+    const toggleButton = passwordField.nextElementSibling;
+    if (toggleButton) {
+      passwordField.type = 'text';
+      const icon = toggleButton.querySelector('i');
+      if (icon) {
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+      }
+    }
+    
+    showToast('Success', 'Password generated successfully', 'success');
+  }
+
+  // Edge Case: Form validation
+  function validateField(field, type) {
+    let isValid = true;
+    let errorMessage = '';
+    
+    // Remove any existing validation styling
+    field.classList.remove('is-invalid', 'is-valid');
+    const feedback = field.nextElementSibling;
+    if (feedback && feedback.classList.contains('invalid-feedback')) {
+      feedback.style.display = 'none';
+    }
+    
+    const value = field.value.trim();
+    
+    switch(type) {
+      case 'name':
+        isValid = value.length >= 3;
+        errorMessage = 'Name must be at least 3 characters long';
+        break;
+        
+      case 'phone':
+        isValid = /^\d{11}$/.test(value);
+        errorMessage = 'Phone must be exactly 11 digits';
+        break;
+        
+      case 'email':
+        isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        errorMessage = 'Please enter a valid email address';
+        break;
+        
+      case 'cnic':
+        isValid = /^\d{5}-\d{7}-\d{1}$/.test(value);
+        errorMessage = 'CNIC must be in format: XXXXX-XXXXXXX-X';
+        break;
+        
+      case 'password':
+        if (value === '') {
+          isValid = true; // Empty password is allowed for edit form
+        } else {
+          isValid = value.length >= 8;
+          errorMessage = 'Password must be at least 8 characters long';
+        }
+        break;
+        
+      case 'salary':
+        isValid = parseFloat(value) > 0;
+        errorMessage = 'Salary must be greater than 0';
+        break;
+        
+      case 'date':
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        isValid = selectedDate <= today;
+        errorMessage = 'Date cannot be in the future';
+        break;
+        
+      case 'select':
+        isValid = value !== '';
+        errorMessage = 'This field is required';
+        break;
+    }
+    
+    if (!isValid && value !== '') {
+      field.classList.add('is-invalid');
+      if (feedback && feedback.classList.contains('invalid-feedback')) {
+        feedback.textContent = errorMessage;
+        feedback.style.display = 'block';
+      }
+    } else if (value !== '') {
+      field.classList.add('is-valid');
+    }
+    
+    return isValid;
+  }
+
+  function validateForm(form) {
+    let isValid = true;
+    const fields = form.querySelectorAll('[required]');
+    
+    fields.forEach(field => {
+      const type = field.type === 'email' ? 'email' : 
+                  field.name === 'phone' ? 'phone' :
+                  field.name === 'cnic' ? 'cnic' :
+                  field.name === 'salary_per' ? 'salary' :
+                  field.name === 'hired_date' ? 'date' :
+                  field.name === 'password' ? 'password' :
+                  field.tagName === 'SELECT' ? 'select' : 'name';
+      
+      if (!validateField(field, type)) {
+        isValid = false;
+      }
+    });
+    
+    return isValid;
+  }
+
+  function resetForm(formId) {
+    const form = document.getElementById(formId);
+    form.reset();
+    
+    // Clear validation states
+    const fields = form.querySelectorAll('.form-control, .form-select');
+    fields.forEach(field => {
+      field.classList.remove('is-invalid', 'is-valid');
+      const feedback = field.nextElementSibling;
+      if (feedback && feedback.classList.contains('invalid-feedback')) {
+        feedback.style.display = 'none';
+      }
+    });
+  }
+
+  // Edge Case: Handle form submission with validation
+  function handleWorkerSubmit(event, form) {
+    event.preventDefault();
+    
+    if (!validateForm(form)) {
+      showToast('Validation Error', 'Please fix the errors in the form', 'warning');
+      return;
+    }
+    
+    const formData = new FormData(form);
+    const isEditMode = form.querySelector('#editWorkerId');
+    const endpoint = isEditMode ? '../include/update_worker.php' : '../include/add_worker.php';
+    const submitBtn = isEditMode ? document.getElementById('editWorkerBtn') : document.getElementById('addWorkerBtn');
+    const spinner = isEditMode ? document.getElementById('editWorkerSpinner') : document.getElementById('addWorkerSpinner');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    fetch(endpoint, {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        // Close modal
+        const modalId = isEditMode ? 'editWorkerModal' : 'addWorkerModal';
+        const modalElement = document.getElementById(modalId);
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+        
+        // Reload workers
+        loadWorkers();
+        
+        // Show success message
+        showToast('Success', data.message, 'success');
+      } else {
+        throw new Error(data.message || 'Operation failed');
+      }
+    })
+    .catch(error => {
+      console.error('Submission error:', error);
+      showToast('Error', error.message, 'danger');
+    })
+    .finally(() => {
+      // Reset button state
+      submitBtn.disabled = false;
+      spinner.classList.add('d-none');
+    });
+  }
+
+  // Edge Case: Edit worker with data validation
+  function editWorker(workerId) {
+    const worker = workersData.find(w => w.worker_id == workerId);
+    if (!worker) {
+      showToast('Error', 'Worker not found', 'danger');
+      return;
+    }
+    
+    // Populate form
+    document.getElementById('editWorkerId').value = worker.worker_id;
+    document.getElementById('editName').value = worker.name || '';
+    document.getElementById('editPhone').value = worker.phone || '';
+    document.getElementById('editEmail').value = worker.email || '';
+    document.getElementById('editCnic').value = worker.cnic || '';
+    document.getElementById('editCategory').value = worker.category || '';
+    document.getElementById('editPaymentType').value = worker.payment_type || '';
+    document.getElementById('editSalaryPer').value = worker.salary_per || '';
+    document.getElementById('editStatus').value = worker.status || 'Active';
+    document.getElementById('editHiredDate').value = worker.hired_date || '';
+    document.getElementById('editNotes').value = worker.notes || '';
+    
+    // Show modal
+    new bootstrap.Modal(document.getElementById('editWorkerModal')).show();
+  }
+
+  // Edge Case: Delete worker with confirmation
+  function initiateDeleteWorker(workerId) {
+    const worker = workersData.find(w => w.worker_id == workerId);
+    if (!worker) {
+      showToast('Error', 'Worker not found', 'danger');
+      return;
+    }
+    
+    currentWorkerIdToDelete = workerId;
+    
+    // Update modal content with worker info
+    const modalTitle = document.querySelector('#deleteConfirmModal .modal-title');
+    modalTitle.innerHTML = `<i class="bi bi-exclamation-triangle me-2"></i>Deactivate ${escapeHtml(worker.name)}`;
+    
+    const modalBody = document.querySelector('#deleteConfirmModal .modal-body');
+    modalBody.innerHTML = `
+      <p>Are you sure you want to deactivate <strong>${escapeHtml(worker.name)}</strong> (ID: ${worker.worker_id})?</p>
+      <p class="text-muted"><small>Worker status will be set to "Inactive". This action can be reversed by editing the worker.</small></p>
+      <div class="alert alert-warning mt-3">
+        <i class="bi bi-info-circle me-2"></i>
+        <small>Deactivated workers will not appear in available worker lists for new tasks.</small>
+      </div>
+    `;
+    
+    // Show modal
+    new bootstrap.Modal(document.getElementById('deleteConfirmModal')).show();
+  }
+
+  function confirmDeleteWorker() {
+    if (!currentWorkerIdToDelete) return;
+    
+    fetch('../include/delete_worker.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `worker_id=${currentWorkerIdToDelete}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Close modal
+        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'));
+        deleteModal.hide();
+        
+        // Reload workers
+        loadWorkers();
+        
+        // Show success message
+        showToast('Success', data.message, 'success');
+      } else {
+        throw new Error(data.message || 'Deactivation failed');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      showToast('Error', error.message, 'danger');
+    })
+    .finally(() => {
+      currentWorkerIdToDelete = null;
+    });
+  }
+
+  // Edge Case: Advanced filtering with multiple criteria
+  function filterWorkers() {
+    const searchTerm = document.getElementById('searchWorkers').value.toLowerCase();
+    const categoryFilter = document.getElementById('filterCategory').value;
+    const statusFilter = document.getElementById('filterStatus').value;
+    const hiredDateFilter = document.getElementById('filterHiredDate').value;
+    const highSalaryFilter = document.getElementById('filterHighSalary').checked;
+    const recentFilter = document.getElementById('filterRecent').checked;
+    
+    const filtered = workersData.filter(worker => {
+      // Text search
+      const matchesSearch = !searchTerm || 
+        (worker.name && worker.name.toLowerCase().includes(searchTerm)) ||
+        (worker.cnic && worker.cnic.toLowerCase().includes(searchTerm)) ||
+        (worker.email && worker.email.toLowerCase().includes(searchTerm)) ||
+        (worker.phone && worker.phone.includes(searchTerm)) ||
+        (worker.worker_id && worker.worker_id.toString().includes(searchTerm)) ||
+        (worker.notes && worker.notes.toLowerCase().includes(searchTerm));
+      
+      // Category filter
+      const matchesCategory = !categoryFilter || worker.category === categoryFilter;
+      
+      // Status filter
+      const matchesStatus = !statusFilter || worker.status === statusFilter;
+      
+      // Date filter
+      const matchesDate = !hiredDateFilter || worker.hired_date === hiredDateFilter;
+      
+      // High salary filter
+      const matchesHighSalary = !highSalaryFilter || (parseFloat(worker.salary_per) > 30000);
+      
+      // Recent hire filter
+      let matchesRecent = true;
+      if (recentFilter && worker.hired_date) {
+        const hiredDate = new Date(worker.hired_date);
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        matchesRecent = hiredDate >= thirtyDaysAgo;
+      }
+      
+      return matchesSearch && matchesCategory && matchesStatus && matchesDate && matchesHighSalary && matchesRecent;
+    });
+    
+    renderWorkersTable(filtered);
+    updateCounts(workersData.length, filtered.length);
+  }
+
+  // Edge Case: Clear filters
+  function clearSearch() {
+    document.getElementById('searchWorkers').value = '';
+    filterWorkers();
+  }
+
+  function clearDateFilter() {
+    document.getElementById('filterHiredDate').value = '';
+    filterWorkers();
+  }
+
+  function clearAllFilters() {
+    document.getElementById('searchWorkers').value = '';
+    document.getElementById('filterCategory').selectedIndex = 0;
+    document.getElementById('filterStatus').selectedIndex = 0;
+    document.getElementById('filterHiredDate').value = '';
+    document.getElementById('filterHighSalary').checked = false;
+    document.getElementById('filterRecent').checked = false;
+    filterWorkers();
+    showToast('Info', 'All filters cleared', 'info');
+  }
+
+  // Edge Case: Sorting
+  function sortTable(column, direction) {
+    const rows = Array.from(document.querySelectorAll('#workersTableBody tr'));
+    
+    rows.sort((a, b) => {
+      let aValue, bValue;
+      
+      switch(column) {
+        case 'name':
+          aValue = a.cells[2].textContent.toLowerCase();
+          bValue = b.cells[2].textContent.toLowerCase();
+          break;
+        case 'salary':
+          aValue = parseFloat(a.dataset.salary) || 0;
+          bValue = parseFloat(b.dataset.salary) || 0;
+          break;
+        case 'date':
+          aValue = new Date(a.dataset.hiredDate || 0);
+          bValue = new Date(b.dataset.hiredDate || 0);
+          break;
+        default:
+          return 0;
+      }
+      
+      if (direction === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+    
+    const tbody = document.getElementById('workersTableBody');
+    rows.forEach(row => tbody.appendChild(row));
+    
+    // Update sort indicators
+    currentSortColumn = column;
+    currentSortDirection = direction;
+    
+    showToast('Info', `Sorted by ${column} (${direction})`, 'info');
+  }
+
+  // Edge Case: Export functionality
+  function exportToCSV() {
+    const visibleRows = document.querySelectorAll('#workersTableBody tr:not([style*="display: none"])');
+    if (visibleRows.length === 0) {
+      showToast('Warning', 'No data to export', 'warning');
+      return;
+    }
+    
+    let csv = 'Worker ID,Name,CNIC,Email,Phone,Category,Payment Type,Salary,Status,Hired Date,Notes,Password\n';
+    
+    visibleRows.forEach(row => {
+      const cells = row.cells;
+      const password = row.querySelector('.password-display').getAttribute('data-password');
+      const rowData = [
+        cells[1].textContent,
+        `"${cells[2].textContent.replace(/"/g, '""')}"`,
+        cells[3].textContent,
+        cells[5].textContent,
+        cells[9].textContent,
+        cells[6].textContent,
+        cells[7].textContent,
+        cells[8].textContent.replace('Rs. ', ''),
+        cells[10].textContent,
+        cells[11].textContent,
+        `"${cells[12].title.replace(/"/g, '""')}"`,
+        `"${password}"`
+      ];
+      csv += rowData.join(',') + '\n';
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `workers_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    
+    showToast('Success', `Exported ${visibleRows.length} workers to CSV`, 'success');
+  }
+
+  // Edge Case: Print functionality
+  function printTable() {
+    const printWindow = window.open('', '_blank');
+    const visibleRows = document.querySelectorAll('#workersTableBody tr:not([style*="display: none"])');
+    
+    if (visibleRows.length === 0) {
+      showToast('Warning', 'No data to print', 'warning');
+      return;
+    }
+    
+    let html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Workers Report - ${new Date().toLocaleDateString()}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th { background-color: #007bff; color: white; padding: 10px; text-align: left; }
+          td { padding: 8px; border-bottom: 1px solid #ddd; }
+          .footer { margin-top: 30px; font-size: 12px; color: #666; }
+          @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Workers Report</h1>
+        <p>Generated: ${new Date().toLocaleString()}</p>
+        <p>Total Workers: ${visibleRows.length}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>CNIC</th>
+              <th>Email</th>
+              <th>Category</th>
+              <th>Salary</th>
+              <th>Status</th>
+              <th>Hired Date</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    visibleRows.forEach(row => {
+      const cells = row.cells;
+      html += `
+        <tr>
+          <td>${cells[1].textContent}</td>
+          <td>${cells[2].textContent}</td>
+          <td>${cells[3].textContent}</td>
+          <td>${cells[5].textContent}</td>
+          <td>${cells[6].textContent}</td>
+          <td>${cells[8].textContent}</td>
+          <td>${cells[10].textContent}</td>
+          <td>${cells[11].textContent}</td>
+        </tr>
+      `;
+    });
+    
+    html += `
+          </tbody>
+        </table>
+        <div class="footer">
+          <p>Report generated by Green Villas Workforce Management System</p>
+        </div>
+        <button class="no-print" onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">Print Report</button>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+    
+    showToast('Info', 'Print window opened', 'info');
+  }
+
+  // Edge Case: Quick view worker details
+  function quickViewWorker(workerId) {
+    const worker = workersData.find(w => w.worker_id == workerId);
+    if (!worker) return;
+    
+    const modalHtml = `
+      <div class="modal fade" id="quickViewModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Worker Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-4 text-center mb-3">
+                  <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; font-size: 2rem;">
+                    ${worker.name ? worker.name.charAt(0).toUpperCase() : '?'}
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <h4>${escapeHtml(worker.name)}</h4>
+                  <p class="text-muted">ID: ${worker.worker_id}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>CNIC:</strong><br><code>${escapeHtml(worker.cnic || 'N/A')}</code></p>
+                  <p><strong>Email:</strong><br>${escapeHtml(worker.email || 'N/A')}</p>
+                  <p><strong>Phone:</strong><br>${escapeHtml(worker.phone || 'N/A')}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Category:</strong><br><span class="badge bg-info">${escapeHtml(worker.category || 'N/A')}</span></p>
+                  <p><strong>Status:</strong><br><span class="badge ${worker.status === 'Active' ? 'badge-active' : 'badge-inactive'}">${worker.status || 'N/A'}</span></p>
+                  <p><strong>Hired Date:</strong><br>${formatDate(worker.hired_date)}</p>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <p><strong>Payment Type:</strong> ${getPaymentTypeText(worker.payment_type)}</p>
+                  <p><strong>Salary Rate:</strong> Rs. ${(parseFloat(worker.salary_per) || 0).toLocaleString('en-PK', {minimumFractionDigits: 2})}</p>
+                  <p><strong>Password:</strong> ${worker.plain_password || 'No password set'}</p>
+                  ${worker.notes ? `<p><strong>Notes:</strong><br>${escapeHtml(worker.notes)}</p>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="editWorker(${worker.worker_id})" data-bs-dismiss="modal">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('quickViewModal');
+    if (existingModal) existingModal.remove();
+    
+    // Add new modal to DOM
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+    modal.show();
+    
+    // Remove modal from DOM after it's hidden
+    document.getElementById('quickViewModal').addEventListener('hidden.bs.modal', function() {
+      this.remove();
+    });
+  }
+
+  // Utility functions
+  function showLoading(show) {
+    const spinner = document.getElementById('tableSpinner');
+    if (show) {
+      spinner.classList.add('active');
+    } else {
+      spinner.classList.remove('active');
+    }
+  }
+
+  function updateCounts(total, visible) {
+    document.getElementById('workerCount').textContent = `${visible} workers found (${total} total)`;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('visibleCount').textContent = visible;
+  }
+
+  function showErrorState(message) {
+    const tbody = document.getElementById('workersTableBody');
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="14" class="text-center text-danger py-4">
+          <i class="bi bi-exclamation-triangle display-6 d-block mb-2"></i>
+          <h5>Error Loading Data</h5>
+          <p class="text-muted">${escapeHtml(message)}</p>
+          <button class="btn btn-primary mt-2" onclick="loadWorkers()">
+            <i class="bi bi-arrow-clockwise me-1"></i>Retry
+          </button>
+        </td>
+      </tr>
+    `;
+    updateCounts(0, 0);
+  }
+
+  function showToast(title, message, type) {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.id = 'toastContainer';
+      toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+      document.body.appendChild(toastContainer);
+    }
+    
+    const toastId = 'toast-' + Date.now();
+    const toastHtml = `
+      <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-${type} text-white">
+          <strong class="me-auto">${title}</strong>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          ${message}
+        </div>
+      </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
+    
+    toastElement.addEventListener('hidden.bs.toast', function() {
+      this.remove();
+    });
+  }
+
+  function togglePasswordVisibility(elementOrId) {
+    let button, passwordField;
+    
+    if (typeof elementOrId === 'string') {
+      // Called from password toggle button in form
+      passwordField = document.getElementById(elementOrId);
+      button = passwordField.nextElementSibling;
+    } else {
+      // Called from table row button
+      button = elementOrId;
+      passwordField = button.previousElementSibling;
+    }
+    
+    const icon = button.querySelector('i');
+    
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      icon.classList.remove('bi-eye');
+      icon.classList.add('bi-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      icon.classList.remove('bi-eye-slash');
+      icon.classList.add('bi-eye');
+    }
+  }
+
+  function getPaymentTypeText(paymentType) {
+    switch(paymentType) {
+      case 'PER_TASK': return 'Per Task';
+      case 'PER_DAY': return 'Per Day';
+      case 'SALARY': return 'Salary';
+      default: return paymentType || 'N/A';
+    }
+  }
+
+  function formatDate(dateString) {
+    if (!dateString || dateString === '0000-00-00') return 'N/A';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'N/A';
+    return date.toLocaleDateString('en-PK', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  function truncateText(text, maxLength) {
+    if (!text) return 'No notes';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
+  }
+
+  function viewNotes(workerName, notes) {
+    document.getElementById('notesContent').textContent = notes || 'No notes available';
+    document.querySelector('#viewNotesModal .modal-title').textContent = `Notes for ${workerName}`;
+    new bootstrap.Modal(document.getElementById('viewNotesModal')).show();
+  }
+</script>
+</body>
+</html>

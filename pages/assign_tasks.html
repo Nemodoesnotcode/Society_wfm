@@ -1,0 +1,446 @@
+<?php require_once '../include/auth_pages.php'; ?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Assign Tasks | Society WorkForce Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="../css/adminlte.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <!-- Same admin header and sidebar as index.html -->
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="../index.html" class="nav-link">Dashboard</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="../assets/img/AdminLTELogo.png" class="user-image rounded-circle shadow" alt="User Image" />
+                <span class="d-none d-md-inline">Admin</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-footer">
+                  <a href="admin_login.html" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="../index.html" class="brand-link">
+            <img src="../assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
+            <span class="brand-text fw-light">🌿 Green Villas</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column">
+              <li class="nav-item">
+                <a href="../index.html" class="nav-link">
+                  <i class="nav-icon bi bi-speedometer"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="manage_house.html" class="nav-link">
+                  <i class="nav-icon bi bi-house"></i>
+                  <p>Manage Houses</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="worker_list.html" class="nav-link">
+                  <i class="nav-icon bi bi-people"></i>
+                  <p>Worker List</p>
+                </a>
+              </li>
+    
+              
+              <li class="nav-item">
+                <a href="availability_tracking.html" class="nav-link">
+                  <i class="nav-icon bi bi-calendar-check"></i>
+                  <p>Availability Tracking</p>
+                </a>
+              </li>
+
+                <li class="nav-item">
+                <a href="assign_tasks.html" class="nav-link active">
+                  <i class="nav-icon bi bi-list-task"></i>
+                  <p>Assign Tasks</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="requests.html" class="nav-link">
+                  <i class="nav-icon bi bi-envelope"></i>
+                  <p>Requests</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="payments.html" class="nav-link">
+                  <i class="nav-icon bi bi-cash-stack"></i>
+                  <p>Payments</p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3 class="mb-0">Assign Tasks</h3>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                  <li class="breadcrumb-item active">Assign Tasks</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title">Pending Service Requests</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Service</th>
+                                <th>Location</th>
+                                <th>Required By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingRequests">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-primary">
+            <!-- In the card-header of the assignment form, add a title element and close button -->
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h3 class="card-title m-0" id="formTitle">Assign Worker</h3>
+    <p>                                                                              </p>
+  
+    <button type="button" class="btn-close btn-close-white" onclick="clearAssignmentForm()" title="Clear Form"></button>
+</div>
+            <form id="assignmentForm">
+              <input type="hidden" name="task_id" id="editTaskId">
+                <div class="card-body">
+                   <!-- Update the manual request input section to be conditional -->
+<div class="mb-3">
+    <label class="form-label fw-bold">Request ID</label>
+    <div class="input-group">
+        <input type="number" name="request_id" id="assignRequestId" class="form-control" placeholder="Enter Request ID" readonly>
+        <button type="button" class="btn btn-outline-secondary" onclick="enableManualRequestId()">
+            <i class="bi bi-pencil"></i>
+        </button>
+    </div>
+    <small class="text-muted">Click pencil to edit manually</small>
+</div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Selected Request</label>
+                        <input type="text" id="requestDetails" class="form-control bg-light" readonly placeholder="Click 'Assign' on a request">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Worker</label>
+                        <select name="worker_id" id="workerSelect" class="form-select" required>
+                            <option value="">Choose worker...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Scheduled Date & Time</label>
+                        <input type="datetime-local" name="scheduled_date" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Amount (Rs.)</label>
+                        <input type="number" name="amount" class="form-control" step="0.01" required>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold">
+                        <i class="bi bi-check-circle me-2"></i>Confirm Assignment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+            <!-- Assigned Tasks -->
+             
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header bg-primary text-white">
+                <h3 class="card-title">Recently Assigned Tasks</h3>
+            </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Task ID</th>
+                            <th>Request</th>
+                            <th>Worker</th>
+                            <th>Scheduled Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="assignedTasks">
+                          <!-- Assigned tasks loaded dynamically -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <strong>Copyright &copy; 2024 NAA.io. All rights reserved.</strong>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
+    
+
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    loadPendingRequests();
+    loadWorkers();
+    loadAssignedTasks();
+  });
+
+  // Enable manual request ID entry
+  function enableManualRequestId() {
+    const requestIdInput = document.getElementById('assignRequestId');
+    requestIdInput.readOnly = false;
+    requestIdInput.focus();
+    requestIdInput.value = '';
+    document.getElementById('requestDetails').value = '';
+  }
+
+  // Function for the Cross (X) button
+  function clearAssignmentForm() {
+    document.getElementById('assignmentForm').reset();
+    document.getElementById('editTaskId').value = '';
+    document.getElementById('assignRequestId').value = '';
+    document.getElementById('assignRequestId').readOnly = true;
+    document.getElementById('requestDetails').value = '';
+    document.getElementById('formTitle').innerText = "Assign Worker";
+    
+    const submitBtn = document.querySelector('#assignmentForm button[type="submit"]');
+    submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Confirm Assignment';
+    submitBtn.className = "btn btn-success w-100 py-2 fw-bold";
+  }
+
+  // Load pending requests
+  function loadPendingRequests() {
+    fetch('../include/get_pending_requests.php')
+      .then(res => res.json())
+      .then(requests => {
+        const tbody = document.getElementById('pendingRequests');
+        tbody.innerHTML = ''; 
+
+        requests.forEach(req => {
+          const service = req.category_needed || "General";
+          
+          tbody.innerHTML += `
+            <tr>
+              <td>#${req.request_id}</td>
+              <td>${service}</td>
+              <td>${req.block}-${req.apartment_no}</td>
+              <td>${req.preferred_time || 'N/A'}</td>
+              <td>
+                <button class="btn btn-sm btn-primary" onclick="assignRequest(${req.request_id}, '${service}', '${req.block}-${req.apartment_no}')">
+                  Assign
+                </button>
+              </td>
+            </tr>`;
+        });
+      });
+  }
+
+  function assignRequest(requestId, serviceType, location) {
+    clearAssignmentForm();
+    document.getElementById('assignRequestId').value = requestId;
+    document.getElementById('assignRequestId').readOnly = true;
+    document.getElementById('requestDetails').value = `ID #${requestId}: ${serviceType} at ${location}`;
+    document.getElementById('assignmentForm').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Load Workers
+  function loadWorkers() {
+    fetch('../include/get_active_workers_for_assign.php')
+      .then(res => res.json())
+      .then(workers => {
+        const select = document.getElementById('workerSelect');
+        select.innerHTML = '<option value="">Choose worker...</option>';
+        const list = Array.isArray(workers) ? workers : (workers.workers || []);
+        list.forEach(w => {
+          select.innerHTML += `<option value="${w.worker_id}" data-rate="${w.salary_per}">${w.name} (${w.category})</option>`;
+        });
+      });
+  }
+
+  // Load Assigned Tasks with edit functionality
+  function loadAssignedTasks() {
+    fetch('../include/get_assigned_tasks.php')
+      .then(res => res.json())
+      .then(tasks => {
+        const tbody = document.getElementById('assignedTasks');
+        tbody.innerHTML = tasks.map(task => `
+            <tr>
+              <td>#${task.task_id}</td>
+              <td>${task.category_needed}</td>
+              <td>${task.worker_name}</td>
+              <td>${task.task_date}</td> 
+              <td>Rs. ${parseFloat(task.amount).toLocaleString()}</td>
+              <td><span class="badge bg-info">${task.status}</span></td>
+              <td>
+                <button class="btn btn-sm btn-warning me-1" onclick="editTask(${task.task_id}, ${task.request_id}, '${task.category_needed.replace(/'/g, "\\'")}', '${task.worker_name.replace(/'/g, "\\'")}', '${task.task_date}', ${task.amount})">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.task_id})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>`).join('');
+      });
+  }
+
+  // Edit Task function
+  function editTask(taskId, requestId, category, workerName, taskDate, amount) {
+    // Set form to edit mode
+    document.getElementById('editTaskId').value = taskId;
+    document.getElementById('assignRequestId').value = requestId;
+    document.getElementById('assignRequestId').readOnly = true;
+    document.getElementById('requestDetails').value = `ID #${requestId}: ${category}`;
+    
+    // Convert date to datetime-local format
+    const dateObj = new Date(taskDate);
+    const formattedDate = dateObj.toISOString().slice(0, 16);
+    
+    // Set form values
+    document.querySelector('input[name="scheduled_date"]').value = formattedDate;
+    document.querySelector('input[name="amount"]').value = amount;
+    
+    // Set form title and button
+    document.getElementById('formTitle').innerText = "Edit Task";
+    const submitBtn = document.querySelector('#assignmentForm button[type="submit"]');
+    submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Update Task';
+    submitBtn.className = "btn btn-warning w-100 py-2 fw-bold";
+    
+    // Scroll to form
+    document.getElementById('assignmentForm').scrollIntoView({ behavior: 'smooth' });
+    
+    // Try to select the correct worker in dropdown
+    setTimeout(() => {
+      const workerSelect = document.getElementById('workerSelect');
+      for (let i = 0; i < workerSelect.options.length; i++) {
+        if (workerSelect.options[i].text.includes(workerName)) {
+          workerSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }, 100);
+  }
+
+  // Delete Task function
+  function deleteTask(taskId) {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    
+    fetch('../include/delete_task.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `task_id=${taskId}`
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        loadPendingRequests();
+        loadAssignedTasks();
+      } else {
+        alert('Error: ' + data.message);
+      }
+    });
+  }
+
+  // Form submission
+  document.getElementById('assignmentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    // Add request_id from the input field
+    const requestId = document.getElementById('assignRequestId').value;
+    formData.set('request_id', requestId);
+    
+    fetch('../include/assign_task.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        clearAssignmentForm();
+        loadPendingRequests();
+        loadAssignedTasks();
+      } else {
+        alert('Error: ' + data.message);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

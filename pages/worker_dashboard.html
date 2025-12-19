@@ -1,0 +1,119 @@
+<?php require_once '../include/worker_auth_check.php'; ?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Worker Panel | Society WFM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f4f7f6; padding-top: 30px; }
+        .welcome-section { background: linear-gradient(135deg, #2e7d32, #4caf50); color: white; padding: 20px; border-radius: 10px; margin-bottom: 25px; }
+        .task-card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-section d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0">Welcome, <span id="displayWorkerName">Worker</span>!</h2>
+                <p class="mb-0">Here are your assigned tasks for today.</p>
+            </div>
+            <a href="worker_login.html" class="btn btn-light btn-sm text-success fw-bold">Sign Out</a>
+        </div>
+
+        <div class="card task-card">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 text-success"><i class="bi bi-list-check me-2"></i>My Assignments</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Task Description</th>
+                                <th>Date/Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workerTasks">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboard();
+        });
+
+        function loadDashboard() {
+            fetch('../include/worker_dashboard_stats.php')
+                .then(res => res.json())
+                .then(data => {
+                    // Display Welcome Name
+                    document.getElementById('displayWorkerName').textContent = data.worker_name;
+
+                    const tbody = document.getElementById('workerTasks');
+                    tbody.innerHTML = '';
+
+                    if (data.tasks.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">No tasks assigned yet.</td></tr>';
+                        return;
+                    }
+
+                    data.tasks.forEach(task => {
+                        const isPending = task.status === 'Pending';
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark">${task.category_needed || 'Service Request'}</div>
+                                    <small class="text-muted">ID: #${task.task_id}</small>
+                                </td>
+                                <td>${task.task_date}</td>
+                                <td>
+                                    <span class="badge ${isPending ? 'bg-warning' : 'bg-success'}">
+                                        ${task.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    ${isPending ? 
+                                        `<button class="btn btn-success btn-sm px-3" onclick="completeTask(${task.task_id})">
+                                            Mark Done
+                                        </button>` : 
+                                        '<i class="bi bi-check-circle-fill text-success fs-5"></i>'}
+                                </td>
+                            </tr>`;
+                    });
+                });
+        }
+
+        function completeTask(taskId) {
+            if(!confirm('Confirm task completion?')) return;
+
+            const formData = new FormData();
+            formData.append('task_id', taskId);
+            formData.append('status', 'Completed');
+            formData.append('notes', 'Completed via simplified dashboard');
+
+            fetch('../include/update_task_status.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert('Task marked as completed!');
+                    loadDashboard();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
