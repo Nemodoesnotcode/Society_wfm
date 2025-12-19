@@ -1,0 +1,125 @@
+
+/* Worker List Specific Styles */
+
+.worker-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.password-cell {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.password-cell .btn {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.8rem;
+}
+
+/* Status badges */
+.badge-active {
+    background-color: #28a745;
+}
+
+.badge-inactive {
+    background-color: #6c757d;
+}
+
+/* Table improvements */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+/* Loading state */
+#loading-state {
+    display: block;
+}
+
+/* Empty state */
+#empty-state {
+    display: none;
+}
+
+/* Action buttons */
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+/* Modal styles */
+.modal-header {
+    background-color: #f8f9fa;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+}
+
+/* Form validation */
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .btn-group .btn {
+        padding: 0.2rem 0.3rem;
+        margin-right: 1px;
+    }
+    
+    .password-cell {
+        font-size: 0.8rem;
+    }
+    
+    .worker-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn, .modal, .sidebar, .main-header, .main-footer {
+        display: none !important;
+    }
+    
+    .table {
+        font-size: 12px;
+    }
+    
+    .badge {
+        border: 1px solid #000;
+        background-color: transparent !important;
+        color: #000 !important;
+    }
+    
+    .content-wrapper {
+        margin-left: 0 !important;
+    }
+}

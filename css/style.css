@@ -1,0 +1,45 @@
+body {
+  font-family: "Source Sans 3", sans-serif;
+  background-color: #f4f6f9;
+}
+
+.navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-wrapper {
+  background-color: #1f2937;
+  color: #fff;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.sidebar-wrapper .nav-link {
+  color: #cfd8dc;
+  display: block;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.sidebar-wrapper .nav-link.active,
+.sidebar-wrapper .nav-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.app-content {
+  padding: 2rem;
+}
+
+.box {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.app-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+}
