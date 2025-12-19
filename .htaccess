@@ -1,0 +1,7 @@
+# Standard version for most XAMPP/WAMP/Linux servers
+AddType application/x-httpd-php .html .htm
+
+# If that doesn't work, try this (for newer Apache versions):
+<FilesMatch ".+\.html$">
+    SetHandler application/x-httpd-php
+</FilesMatch>

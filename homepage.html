@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Green Villas Society | Workforce Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #4caf50;
+            --dark-green: #1b5e20;
+            --accent-orange: #f57c00;
+            --light-gray: #f5f7fa;
+            --dark-gray: #333;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            opacity: 0.9;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1574362848149-11496d93a7c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1684&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 100px 20px;
+            margin-bottom: 60px;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--white);
+            color: var(--primary-green);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Portal Cards Section */
+        .portals-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #666;
+        }
+
+        .portal-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .portal-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .portal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .portal-card-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .portal-card-header i {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .portal-card-header h3 {
+            font-size: 1.8rem;
+        }
+
+        .portal-card-body {
+            padding: 30px;
+        }
+
+        .portal-card-body p {
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .portal-card-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .portal-card-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .portal-card-features li i {
+            color: var(--primary-green);
+        }
+
+        .portal-card-footer {
+            padding: 0 30px 30px;
+        }
+
+        .portal-card-footer .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 60px 0;
+            background-color: #f0f8f0;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature i {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-green);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--light-green);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--light-green);
+        }
+
+        .developer-info {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .portal-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="bi bi-house-heart-fill logo-icon"></i>
+                <div class="logo-text">
+                    <h1>🌿 Green Villas Society</h1>
+                    <p>Workforce Management System</p>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="bi bi-list"></i>
+            </button>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="#home">Home</a>
+                <a href="#portals">Portals</a>
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Welcome to Green Villas Society</h2>
+            <p>An integrated workforce management system developed by NAA Group to streamline operations, enhance efficiency, and ensure seamless coordination between residents, workers, and administrators.</p>
+            <div class="hero-btns">
+                <a href="pages/admin_login.html" class="btn btn-primary">
+                    <i class="bi bi-shield-lock"></i> Admin One Login
+                </a>
+                <a href="pages/admin2_login.html" class="btn btn-secondary">
+                    <i class="bi bi-shield-check"></i> Admin Two Login
+                </a>
+                <a href="pages/worker_login.html" class="btn btn-secondary">
+                    <i class="bi bi-person-badge"></i> Worker Login
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portals Section -->
+    <section class="portals-section" id="portals">
+        <div class="container">
+            <div class="section-title">
+                <h2>Access Your Portal</h2>
+                <p>Choose the appropriate portal based on your role within the Green Villas Society</p>
+            </div>
+            
+            <div class="portal-cards">
+                <!-- Admin One Portal Card -->
+                <div class="portal-card">
+                    <div class="portal-card-header" style="background: linear-gradient(135deg, #2e7d32, #4caf50);">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <h3>Admin One Portal</h3>
+                    </div>
+                    <div class="portal-card-body">
+                        <p>Primary administrator with full system access and control over all operations.</p>
+                        <ul class="portal-card-features">
+                            <li><i class="bi bi-check-circle"></i> Full System Access</li>
+                            <li><i class="bi bi-check-circle"></i> Master Control Panel</li>
+                            <li><i class="bi bi-check-circle"></i> Financial Oversight</li>
+                            <li><i class="bi bi-check-circle"></i> System Configuration</li>
+                        </ul>
+                    </div>
+                    <div class="portal-card-footer">
+                        <a href="pages/admin_login.html" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Login as Admin One
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Admin Two Portal Card -->
+                <div class="portal-card">
+                    <div class="portal-card-header" style="background: linear-gradient(135deg, #0288d1, #03a9f4);">
+                        <i class="bi bi-shield-check"></i>
+                        <h3>Admin Two Portal</h3>
+                    </div>
+                    <div class="portal-card-body">
+                        <p>Secondary administrator with operational control and task management capabilities.</p>
+                        <ul class="portal-card-features">
+                            <li><i class="bi bi-check-circle"></i> Worker Management</li>
+                            <li><i class="bi bi-check-circle"></i> Task Assignment</li>
+                            <li><i class="bi bi-check-circle"></i> Attendance Tracking</li>
+                            <li><i class="bi bi-check-circle"></i> Report Generation</li>
+                        </ul>
+                    </div>
+                    <div class="portal-card-footer">
+                        <a href="pages/admin2_login.html" class="btn btn-primary" style="background: #0288d1;">
+                            <i class="bi bi-box-arrow-in-right"></i> Login as Admin Two
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Worker Portal Card -->
+                <div class="portal-card">
+                    <div class="portal-card-header">
+                        <i class="bi bi-person-badge-fill"></i>
+                        <h3>Worker Portal</h3>
+                    </div>
+                    <div class="portal-card-body">
+                        <p>Dedicated interface for workers to view assigned tasks, update status, and track earnings.</p>
+                        <ul class="portal-card-features">
+                            <li><i class="bi bi-check-circle"></i> View Assigned Tasks</li>
+                            <li><i class="bi bi-check-circle"></i> Update Task Status</li>
+                            <li><i class="bi bi-check-circle"></i> Mark Daily Attendance</li>
+                            <li><i class="bi bi-check-circle"></i> Track Payments & Earnings</li>
+                        </ul>
+                    </div>
+                    <div class="portal-card-footer">
+                        <a href="pages/worker_login.html" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Access Worker Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>System Features</h2>
+                <p>Our workforce management system offers comprehensive tools for efficient society operations</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="bi bi-people-fill"></i>
+                    <h3>Worker Management</h3>
+                    <p>Add, view, and manage all workers with detailed profiles and categorization.</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="bi bi-house-door-fill"></i>
+                    <h3>House Management</h3>
+                    <p>Track all houses in the society and assign workers based on requirements.</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="bi bi-calendar-check-fill"></i>
+                    <h3>Attendance Tracking</h3>
+                    <p>Monitor worker attendance and working hours with real-time updates.</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="bi bi-list-task"></i>
+                    <h3>Task Assignment</h3>
+                    <p>Assign tasks to workers with location, schedule, and payment details.</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="bi bi-cash-coin"></i>
+                    <h3>Payment Management</h3>
+                    <p>Track payments, earnings, and generate financial reports for workers.</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="bi bi-chat-left-text-fill"></i>
+                    <h3>Communication</h3>
+                    <p>Direct chat system for seamless communication between admin and workers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="about">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Green Villas Society</h3>
+                    <p>A premium residential society committed to excellence in community living and workforce management.</p>
+                    <div class="developer-info">
+                        <p><strong>Developed by:</strong> NAA Group</p>
+                        <p><strong>System:</strong> Workforce Management</p>
+                        <p><strong>Version:</strong> 2.0</p>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="pages/admin_login.html">Admin One Login</a></li>
+                        <li><a href="pages/admin2_login.html">Admin Two Login</a></li>
+                        <li><a href="pages/worker_login.html">Worker Login</a></li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="bi bi-geo-alt"></i> 🌿 Green Villas Society, Lahore</li>
+                        <li><i class="bi bi-telephone"></i> (021) 123-4567</li>
+                        <li><i class="bi bi-envelope"></i> info@greenvillas.naa.io</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>Copyright &copy; 2024 Green Villas Society | Developed by NAA Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,855 @@
+<?php require_once 'include/auth_gatekeeper.php'; ?>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Society WFM | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#2e7d32" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <meta name="title" content="Society WorkForce Management | Admin Dashboard" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="keywords"
+      content="Society WorkForce Management System, Admin Dashboard, Workers, Maids, Plumbers, Electricians, Bootstrap 5"
+    />
+    <meta name="supported-color-schemes" content="light dark" />
+    <link rel="preload" href="./css/adminlte.css" as="style" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
+      integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
+      integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <style>
+      /* Modern Green Theme Enhancements */
+      .small-box {
+        border-radius: 15px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .small-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      }
+      
+      .text-bg-primary { background: linear-gradient(135deg, #2e7d32, #4caf50) !important; }
+      .text-bg-success { background: linear-gradient(135deg, #388e3c, #66bb6a) !important; }
+      .text-bg-warning { background: linear-gradient(135deg, #f57c00, #ff9800) !important; }
+      .text-bg-danger { background: linear-gradient(135deg, #d32f2f, #f44336) !important; }
+      
+      .card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      }
+      
+      .card-header {
+        background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
+        color: white !important;
+        border-radius: 15px 15px 0 0 !important;
+        border: none;
+        font-weight: 600;
+      }
+      
+      .btn-modern {
+        background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 10px 20px !important;
+        font-weight: 600;
+        transition: all 0.3s ease !important;
+      }
+      
+      .btn-modern:hover {
+        background: linear-gradient(135deg, #1b5e20, #2e7d32) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3) !important;
+      }
+    </style>
+    </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="#" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="#" class="nav-link">Dashboard</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="./pages/manage_house.html" class="nav-link">Manage Houses</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="./pages/availability_tracking.html" class="nav-link">Availability</a>
+            </li>
+            
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                <i class="bi bi-search"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-chat-text"></i>
+                <span class="navbar-badge badge text-bg-danger">3</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <a href="#" class="dropdown-item">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/user1-128x128.jpg"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Muhammad Ali
+                        <span class="float-end fs-7 text-danger"
+                          ><i class="bi bi-star-fill"></i
+                        ></span>
+                      </h3>
+                      <p class="fs-7">Just got free from House no 23, Block A</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 2 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/samina-2560x1707.png"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Samina Bibi
+                        <span class="float-end fs-7 text-secondary">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">Aj maine nhi ana</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 3 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="./assets/img/munib.png"
+                        alt="User Avatar"
+                        class="img-size-50 rounded-circle me-3"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <h3 class="dropdown-item-title">
+                        Munib ur Rehman
+                        <span class="float-end fs-7 text-warning">
+                          <i class="bi bi-star-fill"></i>
+                        </span>
+                      </h3>
+                      <p class="fs-7">Heading to House no 450,C</p>
+                      <p class="fs-7 text-secondary">
+                        <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
+                      </p>
+                    </div>
+                  </div>
+                  </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-bell-fill"></i>
+                <span class="navbar-badge badge text-bg-warning">15</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">25 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-envelope me-2"></i> 4 new messages
+                  <span class="float-end text-secondary fs-7">3 mins</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-people-fill me-2"></i> 8 Alerts
+                  <span class="float-end text-secondary fs-7">12 hours</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
+                  <span class="float-end text-secondary fs-7">2 days</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
+              </div>
+            </li>
+            
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img
+                  src="./assets/img/AdminLTELogo.png"
+                  class="user-image rounded-circle shadow"
+                  alt="User Image"
+                />
+                <span class="d-none d-md-inline">NAA Admin</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img
+                    src="./assets/img/AdminLTELogo.png"
+                    class="rounded-circle shadow"
+                    alt="User Image"
+                  />
+                  <p>
+                    NAA - Admin
+                    <small>Member since Dec, 2024</small>
+                  </p>
+                </li>
+                
+                <li class="user-footer">
+                  <a href="./pages/admin_login.html" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+                </ul>
+            </li>
+            </ul>
+          </div>
+        </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="index.html" class="brand-link">
+            <img
+              src="./assets/img/AdminLTELogo.png"
+              alt="AdminLTE Logo"
+              class="brand-image opacity-75 shadow"
+            />
+            <span class="brand-text fw-light">🌿 Green Villas</span>
+            </a>
+          </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul
+              class="nav sidebar-menu flex-column"
+              data-lte-toggle="treeview"
+              role="navigation"
+              aria-label="Main navigation"
+              data-accordion="false"
+              id="navigation"
+            >
+              <li class="nav-item menu-open">
+                <a href="homepage.html" class="nav-link active">
+                  <i class="nav-icon bi bi-house"></i>
+                  <p>
+                    Home
+                 
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="index.html" class="nav-link active">
+                       <i class="nav-icon bi bi-speedometer"></i>
+                      <i class="nav-arrow bi bi-chevron-right"></i>
+                      <p>Dashboard</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="./pages/add_worker.html" class="nav-link">
+                    <i class="nav-icon bi bi-person-plus"></i>
+                      <p>Add Worker</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="./pages/worker_list.html" class="nav-link">
+                      <i class="nav-icon bi bi-people"></i>
+                      <p>Worker List</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="./pages/manage_house.html" class="nav-link">
+                  <i class="nav-icon bi bi-house"></i>
+                  <p>Manage Houses</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./pages/availability_tracking.html" class="nav-link">
+                  <i class="nav-icon bi bi-calendar-check"></i>
+                  <p>Availability Tracking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./pages/assign_tasks.html" class="nav-link">
+                  <i class="nav-icon bi bi-list-task"></i>
+                  <p>Assign Tasks</p>
+                  </a>
+              </li>
+
+      
+
+                <li class="nav-item">
+                <a href="./pages/requests.html" class="nav-link">
+                  <i class="nav-icon bi bi-envelope"></i>
+                  <p>Requests</p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                <a href="./pages/payments.html" class="nav-link">
+                  <i class="nav-icon bi bi-cash-stack"></i>
+                  <p>Payments</p>
+                  </a>
+              </li>
+              
+                </ul>
+              </li>
+            </ul>
+            </nav>
+        </div>
+        </aside>
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3 class="mb-0">Dashboard</h3>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="homepage.html">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Main Dashboard</li>
+                </ol>
+              </div>
+            </div>
+            </div>
+          </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-primary">
+                  <div class="inner">
+                    <h3 id="totalWorkers">0</h3>
+                    <p>Total Workers</p>
+                  </div>
+                  <svg
+  class="small-box-icon"
+  fill="currentColor"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- Person -->
+  <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63v-.122z"/>
+</svg>
+
+
+                  
+                </div>
+                </div>
+
+
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-success">
+                  <div class="inner">
+                    <h3 id="workingToday">0<sup class="fs-5"></sup></h3>
+                    <p>Active Workers</p>
+                  </div>
+                  
+                 <svg
+  class="small-box-icon"
+  fill="currentColor"  
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- Person -->
+  <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63v-.122z"/>
+  <!-- Tick -->
+  <path d="M18.5 8.25a.75.75 0 011.06 1.06l-3 3a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.47-2.47z"/>
+</svg>
+
+                  
+                </div>
+                </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-warning">
+                  <div class="inner">
+                    <h3 id="totalHouses">0</h3>
+                    <p>Total Houses</p>
+                  </div>
+                 <svg
+  class="small-box-icon"
+  fill="currentColor"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <path
+    d="M11.47 3.72a.75.75 0 011.06 0l7 7a.75.75 0 11-1.06 1.06L18 11.44V19a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3.5a1 1 0 00-1-1H12a1 1 0 00-1 1V19a1 1 0 01-1 1H7a1 1 0 01-1-1v-7.56l-.47.44a.75.75 0 11-1.06-1.06l7-7z"
+  />
+</svg>
+
+                  
+                </div>
+                </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-danger">
+                  <div class="inner">
+                    <h3 id="onLeave">0</h3>
+                    <p>On Leave</p>
+                  </div>
+                  <svg
+  class="small-box-icon"
+  fill="currentColor"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <path d="M12 2a7 7 0 110 14 7 7 0 010-14zm0 1.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zm.75 3.25a.75.75 0 00-1.5 0v3.25c0 .414.336.75.75.75h2a.75.75 0 000-1.5h-1.25V6.75z"/>
+  <path d="M3.25 19.125a7.125 7.125 0 0114.25 0v.1a.75.75 0 01-.36.63 13 13 0 01-6.77 1.87c-2.47 0-4.79-.68-6.76-1.87a.75.75 0 01-.36-.63v-.1z"/>
+</svg>
+
+                </div>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-lg-7 connectedSortable">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title">Workload Statistics</h3>
+                  </div>
+
+                  <div class="card-body">
+                    <div id="revenue-chart" style="min-height: 300px;"></div>
+                  </div>
+                </div>
+                <div class="card direct-chat direct-chat-primary mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title">Direct Chat</h3>
+
+                    <div class="card-tools">
+                      <span title="3 New Messages" class="badge text-bg-primary"> 3 </span>
+                      <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-tool"
+                        title="Contacts"
+                        data-lte-toggle="chat-pane"
+                      >
+                        <i class="bi bi-chat-text-fill"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="direct-chat-messages">
+                      <div class="direct-chat-msg">
+                        <div class="direct-chat-infos clearfix">
+                          <span class="direct-chat-name float-start"> Faria Hassan </span>
+                          <span class="direct-chat-timestamp float-end"> 23 Oct 5:00 pm </span>
+                        </div>
+                        <img
+                          class="direct-chat-img"
+                          src="./assets/img/faria.png"
+                          alt="message user image"
+                        />
+                        <div class="direct-chat-text">Hey!!!There is an emergency!!!</div>
+                        </div>
+                      <div class="direct-chat-msg end">
+                        <div class="direct-chat-infos clearfix">
+                          <span class="direct-chat-name float-end"> Admin  </span>
+                          <span class="direct-chat-timestamp float-start"> 23 Oct 5:05 pm </span>
+                        </div>
+                        <img
+                          class="direct-chat-img"
+                          src="./assets/img/AdminLTELogo.png"
+                          alt="message user image"
+                        />
+                        <div class="direct-chat-text">What's your emergency?</div>
+                        </div>
+                      <div class="direct-chat-msg">
+                        <div class="direct-chat-infos clearfix">
+                          <span class="direct-chat-name float-start"> Faria Hassan </span>
+                          <span class="direct-chat-timestamp float-end"> 23 Oct 5:37 pm </span>
+                        </div>
+                        <img
+                          class="direct-chat-img"
+                          src="./assets/img/faria.png"
+                          alt="message user image"
+                        />
+                        <div class="direct-chat-text">
+                          Urgently need an electrician...the bulb just died
+                        </div>
+                        </div>
+                      <div class="direct-chat-msg end">
+                        <div class="direct-chat-infos clearfix">
+                          <span class="direct-chat-name float-end"> Admin one </span>
+                          <span class="direct-chat-timestamp float-start"> 23 Oct 5:40 pm </span>
+                        </div>
+                        <img
+                          class="direct-chat-img"
+                          src="./assets/img/AdminLTELogo.png"
+                          alt="message user image"
+                        />
+                        <div class="direct-chat-text">Sending one ASAP.</div>
+                        </div>
+                      </div>
+                    <div class="direct-chat-contacts">
+                      <ul class="contacts-list">
+                        <li>
+                          <a href="#">
+                            <img
+                              class="contacts-list-img"
+                              src="./assets/img/user1-128x128.jpg"
+                              alt="User Avatar"
+                            />
+
+                            <div class="contacts-list-info">
+                              <span class="contacts-list-name">
+                                M. Sameer
+                                <small class="contacts-list-date float-end"> 11/28/2025 </small>
+                              </span>
+                              <span class="contacts-list-msg"> Is there any plumber available? </span>
+                            </div>
+                            </a>
+                        </li>
+                        <li>
+                          <a href="#">
+                            <img
+                              class="contacts-list-img"
+                              src="./assets/img/user7-128x128.jpg"
+                              alt="User Avatar"
+                            />
+
+                            <div class="contacts-list-info">
+                              <span class="contacts-list-name">
+                                Sarah Khalid
+                                <small class="contacts-list-date float-end"> 11/23/2025 </small>
+                              </span>
+                              <span class="contacts-list-msg"> I will be waiting for my cook </span>
+                            </div>
+                            </a>
+                        </li>
+                        <li>
+                          <a href="#">
+                            <img
+                              class="contacts-list-img"
+                              src="./assets/img/faria.png"
+                              alt="User Avatar"
+                            />
+
+                            <div class="contacts-list-info">
+                              <span class="contacts-list-name">
+                                Sawera Khanum
+                                <small class="contacts-list-date float-end"> 11/20/2025 </small>
+                              </span>
+                              <span class="contacts-list-msg"> Samina Bibi is such a nice lady </span>
+                            </div>
+                            </a>
+                        </li>
+                        </ul>
+                      </div>
+                    </div>
+                  <div class="card-footer">
+                    <form action="#" method="post">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          name="message"
+                          placeholder="Type Message ..."
+                          class="form-control"
+                        />
+                        <span class="input-group-append">
+                          <button type="button" class="btn btn-modern">Send</button>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+                  </div>
+                </div>
+              <div class="col-lg-5 connectedSortable">
+                <div class="card text-white bg-primary bg-gradient border-primary mb-4">
+                  <div class="card-header border-0">
+                    <h3 class="card-title">Live Status</h3>
+                    <div class="card-tools">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        data-lte-toggle="card-collapse"
+                      >
+                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body" style="height: 220px; overflow-y: auto;">
+                    <ul class="list-group list-group-flush" id="worker-status-list">
+                      <!-- Worker status will be loaded dynamically -->
+                    </ul>
+                  </div>
+                  <div class="card-footer border-0">
+                    <div class="row">
+                      
+                      
+                      
+                    </div>
+                    </div>
+                  </div>
+                  
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title">Quick Actions</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="row text-center">
+                      <div class="col-6 mb-3">
+                        <a href="./pages/add_worker.html" class="btn btn-modern w-100 mb-2">
+                          <i class="bi bi-person-plus fs-4 d-block"></i>
+                          Add Worker
+                        </a>
+                      </div>
+                      <div class="col-6 mb-3">
+                        <a href="./pages/manage_house.html" class="btn btn-modern w-100 mb-2">
+                          <i class="bi bi-house fs-4 d-block"></i>
+                          Manage Houses
+                        </a>
+                      </div>
+                      <div class="col-6">
+                        <a href="./pages/worker_list.html" class="btn btn-modern w-100 mb-2">
+                          <i class="bi bi-people fs-4 d-block"></i>
+                          Worker List
+                        </a>
+                      </div>
+                      <div class="col-6">
+                        <a href="./pages/availability_tracking.html" class="btn btn-modern w-100 mb-2">
+                          <i class="bi bi-calendar-check fs-4 d-block"></i>
+                          Attendance
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </main>
+      <footer class="app-footer">
+        <div class="float-end d-none d-sm-inline">Providing Services</div>
+        <strong>
+          Copyright &copy; 2014-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none">NAA.io</a>.
+        </strong>
+        All rights reserved.
+        </footer>
+      </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
+      integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // Load dashboard statistics
+      document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardStats();
+        initializeCharts();
+        loadWorkerStatus();
+        
+        // Refresh data every 30 seconds
+        setInterval(loadDashboardStats, 30000);
+        setInterval(loadWorkerStatus, 30000);
+      });
+
+      function loadDashboardStats() {
+        fetch('include/get_dashboard_stats.php')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('totalWorkers').textContent = data.totalWorkers || '0';
+            document.getElementById('workingToday').textContent = data.workingToday || '0';
+            document.getElementById('totalHouses').textContent = data.totalHouses || '0';
+            document.getElementById('onLeave').textContent = data.onLeave || '0';
+          })
+          .catch(error => {
+            console.error('Error loading dashboard stats:', error);
+            // Fallback values
+            document.getElementById('totalWorkers').textContent = '17';
+            document.getElementById('workingToday').textContent = '12';
+            document.getElementById('totalHouses').textContent = '10';
+            document.getElementById('onLeave').textContent = '3';
+          });
+      }
+
+      function loadWorkerStatus() {
+  fetch('include/get_worker_status.php')
+    .then(response => response.json())
+    .then(data => {
+      const statusList = document.getElementById('worker-status-list');
+      statusList.innerHTML = '';
+
+      let availableCount = 0;
+      let busyCount = 0;
+      let onLeaveCount = 0;
+
+      data.forEach(worker => {
+        let statusClass = '';
+        let badgeClass = 'bg-secondary';
+        let statusText = worker.status;
+
+        switch(worker.status) {
+          case 'Available':
+            statusClass = 'list-group-item-success';
+            badgeClass = 'bg-success';
+            availableCount++;
+            break;
+          case 'Busy':
+            statusClass = 'list-group-item-warning';
+            badgeClass = 'bg-warning';
+            busyCount++;
+            break;
+          case 'On Leave':
+            statusClass = 'list-group-item-danger';
+            badgeClass = 'bg-danger';
+            onLeaveCount++;
+            break;
+          default:
+            statusClass = 'list-group-item-secondary';
+        }
+
+        statusList.innerHTML += `
+          <li class="list-group-item ${statusClass} d-flex justify-content-between align-items-center">
+            <div>
+              <strong>${worker.name}</strong><br>
+              <small>${worker.category}</small>
+            </div>
+            <span class="badge ${badgeClass} rounded-pill">${statusText}</span>
+          </li>
+        `;
+      });
+
+      // Update counters
+      document.getElementById('status-available').textContent = availableCount;
+      document.getElementById('status-busy').textContent = busyCount;
+      document.getElementById('status-onleave').textContent = onLeaveCount;
+    })
+    .catch(error => {
+      console.error('Error loading worker status:', error);
+    });
+}
+
+      function initializeCharts() {
+        // Workload Statistics Chart
+        var workloadOptions = {
+          series: [{
+            name: 'Tasks Completed',
+            data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 85, 75, 90]
+          }],
+          chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+              enabled: false
+            }
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            curve: 'smooth',
+            width: 3
+          },
+          colors: ['#2e7d32'],
+          xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          },
+          title: {
+            text: 'Monthly Task Completion',
+            align: 'left',
+            style: {
+              fontSize: '16px',
+              color: '#2e7d32'
+            }
+          }
+        };
+
+        var workloadChart = new ApexCharts(document.querySelector("#revenue-chart"), workloadOptions);
+        workloadChart.render();
+      }
+    </script>
+  </body>
+</html>
